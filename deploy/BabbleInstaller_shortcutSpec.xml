@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shortcuts>
+    <skipIfNotSupported/>
+    <programGroup defaultName="Babble" location="applications"/>
+    <shortcut applications="no" desktop="no"
+        iconFile="$INSTALL_PATH/babble.ico" iconIndex="0"
+        initialState="normal" name="Babble" programGroup="yes"
+        startMenu="no" startup="no" target="$INSTALL_PATH/Babble.jar"/>
+</shortcuts>

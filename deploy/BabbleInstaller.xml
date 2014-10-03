@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<installation version="1.0">
+    <info>
+        <appname>Babble</appname>
+        <appversion>0.2</appversion>
+        <authors>
+            <author email="baltasarq@yahoo.es" name="Baltasar"/>
+        </authors>
+        <url>http://caad.es/baltasarq/prjs/babble/</url>
+        <uninstaller name="Uninstaller.jar" write="yes"/>
+        <requiresjdk>no</requiresjdk>
+        <writeinstallationinformation>no</writeinstallationinformation>
+        <pack200/>
+        <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7"/>
+    </info>
+    <guiprefs height="480" resizable="no" width="640">
+        <modifier key="useFlags" value="yes"/>
+        <modifier key="langDisplayType" value="default"/>
+    </guiprefs>
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="spa"/>
+    </locale>
+    <resources>
+        <res id="shortcutSpec.xml" src="BabbleInstaller_shortcutSpec.xml"/>
+        <res id="Unix_shortcutSpec.xml" src="BabbleInstaller_Unix_shortcutSpec.xml"/>
+        <res id="installer.langsel.img" src="C:\Users\baltasarq\Dropbox\prys\Babble\deploy\babble.png"/>
+        <res id="Installer.image" src="C:\Users\baltasarq\Dropbox\prys\Babble\deploy\babble.png"/>
+    </resources>
+    <panels>
+        <panel classname="CheckedHelloPanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+    <packs>
+        <pack name="Babble application" preselected="yes" required="yes">
+            <description/>
+            <file override="update"
+                src="C:\Users\baltasarq\Dropbox\prys\Babble\deploy\Babble.jar" targetdir="$INSTALL_PATH/"/>
+            <file override="update"
+                src="C:\Users\baltasarq\Dropbox\prys\Babble\deploy\babble.ico" targetdir="$INSTALL_PATH/"/>
+            <file override="update"
+                src="C:\Users\baltasarq\Dropbox\prys\Babble\deploy\babble.png" targetdir="$INSTALL_PATH/"/>
+        </pack>
+    </packs>
+    <native name="ShellLink.dll" type="izpack"/>
+    <native name="ShellLink_x64.dll" type="izpack"/>
+</installation>
