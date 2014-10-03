@@ -27,7 +27,16 @@ public class Ppal {
             mainWindow = new BabbleView();
             mainWindow.setVisible( true );
         } catch(Exception e) {
-            Util.msgError(mainWindow, e.getMessage());
+            String msg = e.getLocalizedMessage();
+
+            if ( msg == null
+              || msg.isEmpty() )
+            {
+                msg = "unexpected app error";
+            }
+
+            e.printStackTrace();
+            Util.msgError( mainWindow, msg );
         }
     }
 }

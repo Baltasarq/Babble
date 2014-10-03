@@ -183,17 +183,17 @@ public class BabbleView extends JFrame {
         JPanel infoPanel = new JPanel();
 
         btOk.setMnemonic( 'o' );
-        btOk.addActionListener( new java.awt.event.ActionListener() {
+        btOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BabbleView.this.aboutBox.setVisible( false );
+                BabbleView.this.aboutBox.setVisible(false);
             }
-        } );
+        });
         btOk.setHorizontalAlignment( JButton.CENTER );
         lblWebPage.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 
         if ( this.getIconImage() != null ) {
             lblIcon.setIcon( new ImageIcon( this.getIconImage() ) );
-            this.aboutBox.setIconImage( this.getIconImage() );
+            System.out.println( "App icon for about label is now set." );
         } else {
             lblIcon.setText( "" );
         }
@@ -398,7 +398,7 @@ public class BabbleView extends JFrame {
                 edTitleKeyReleased(evt);
             }
         });
-        this.edTitle.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edTitle.getPreferredSize().height ) );
+        this.edTitle.setMaximumSize(new Dimension(Integer.MAX_VALUE, this.edTitle.getPreferredSize().height));
         Box boxTitle = Box.createVerticalBox();
         boxTitle.add(Box.createVerticalGlue());
         boxTitle.add(this.edTitle);
@@ -630,11 +630,14 @@ public class BabbleView extends JFrame {
 
             if ( img != null ) {
                 this.setIconImage( img );
+                System.out.println( "App icon loaded..." );
             }
 
         } catch(Exception exc)
         {
-            // ignored
+           System.err.println( "While loading icon..." );
+           System.err.println( exc.getLocalizedMessage() );
+           exc.printStackTrace();
         }
 
         return;
@@ -647,6 +650,7 @@ public class BabbleView extends JFrame {
         this.setContentPane( panel );
         panel.setBorder( new EmptyBorder( 10, 10, 10, 10 ) );
 
+        this.buildIcon();
         this.buildMenu();
         this.buildAboutBox();
         this.buildInfoPanel();
