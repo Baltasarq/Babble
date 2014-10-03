@@ -58,11 +58,11 @@ public class BibliographicData {
     public static final String EtqEmail = "authoremail";
     public static final String EtqRelease = "release";
     public static final String EtqVersion = "version";
+    public static final String EtqForgiveness = "forgiveness";
     public static final String EtqOriginated = "originated";
     public static final String EtqGenerator = "generator";
     public static final String EtqUrl = "url";
     public static final String EtqReleaseDate = "releasedate";
-    public static final String EtqRelelase = "release";
     public static final String EtqColophon = "colophon";
     public static final String EtqIdentification = "identification";
     public static final String EtqFormat = "format";
@@ -75,11 +75,11 @@ public class BibliographicData {
     public static final String EtqDescription = "description";
 
     public enum Genre {
-        Children_Fiction, Collegiate_Fiction, Comedy, Erotica,
-        Fairy_Tale, Fantasy, Fiction, Historical,
-        Horror, Mistery, Non_fiction, Other,
-        Religious_Fiction, Romance, Science_Fiction, Surreal,
-        Western
+        children_Fiction, collegiate_fiction, comedy, erotica,
+        fairy_Tale, fantasy, fiction, historical,
+        horror, mistery, non_fiction, other,
+        religious_fiction, romance, science_fiction, surreal,
+        western
     };
 
     public static String[] GenresNamesEN = {
@@ -99,15 +99,15 @@ public class BibliographicData {
     };
 
     public enum Forgiveness {
-        Merciful, Polite, Nasty, Cruel
+        merciful, polite, tough, nasty, cruel
     };
 
     public static String[] ForgivenessNamesEN = {
-            "Merciful", "Polite", "Nasty", "Cruel"
+            "Merciful", "Polite", "Tough", "Nasty", "Cruel"
     };
 
     public static String[] ForgivenessNamesES = {
-            "Misericordiosa", "Educada", "Apestosa", "Cruel"
+            "Misericordiosa", "Educada", "Dura", "Apestosa", "Cruel"
     };
 
     public enum Format {
@@ -134,7 +134,7 @@ public class BibliographicData {
     }
 
     private void setIfID(String ifID) {
-        this.ifID = ifID;
+        this.ifID = ifID.trim().toUpperCase();
     }
 
     public void setNewIfID() {
@@ -410,7 +410,7 @@ public class BibliographicData {
             hd.startElement( "","", EtqReleaseDate, null );
             hd.characters( strDate.toCharArray(), 0, strDate.length() );
             hd.endElement( "","", EtqReleaseDate );
-            hd.endElement( "","", EtqRelelase );
+            hd.endElement( "","", EtqRelease );
 
             // Colophon
             hd.startElement( "","", EtqColophon, null );
@@ -420,7 +420,7 @@ public class BibliographicData {
             hd.startElement( "","", EtqOriginated, null );
             hd.characters( strDate.toCharArray(), 0, strDate.length() );
             hd.endElement( "","", EtqOriginated );
-            hd.endElement( "","", EtqRelelase );
+            hd.endElement( "","", EtqColophon );
 
             hd.endElement( "","", EtqStory );
             hd.endElement( "", "", EtqIfIndex );
@@ -473,6 +473,14 @@ public class BibliographicData {
             hd.startElement(  "","", EtqGenre, null );
             hd.characters( str.toCharArray(), 0, str.length() );
             hd.endElement(  "","", EtqGenre );
+        }
+
+        // forgiveness
+        if ( forgiveness != null ) {
+            str = forgiveness.toString();
+            hd.startElement(  "","", EtqForgiveness, null );
+            hd.characters( str.toCharArray(), 0, str.length() );
+            hd.endElement(  "","", EtqForgiveness );
         }
 
         // description
@@ -573,7 +581,7 @@ public class BibliographicData {
 
                 // Load Genre
                 node = Util.getXmlChildByName( nodeBiblio, EtqGenre );
-                Genre genre = getGenreByName( node.getTextContent(), Util.Language.EN );
+                Genre genre = Genre.valueOf( node.getTextContent().trim().toLowerCase() );
 
                 if ( genre != null ) {
                         toret.setGenre( genre );
@@ -591,6 +599,13 @@ public class BibliographicData {
 
                 if ( node != null ) {
                      toret.setSubtitle( node.getTextContent() );
+                }
+
+                // Load forgiveness
+                node = Util.getXmlChildByName( nodeBiblio, EtqForgiveness );
+
+                if ( node != null ) {
+                    toret.setForgiveness( Forgiveness.valueOf( node.getTextContent().trim().toLowerCase() ) );
                 }
 
                 // Load language
@@ -683,9 +698,9 @@ public class BibliographicData {
     private String eMail = "";
     private int release;
     private Calendar date;
-    private Genre genre = Genre.Fiction;
+    private Genre genre = Genre.fiction;
     private Util.Language language;
-    private Forgiveness forgiveness = Forgiveness.Polite;
+    private Forgiveness forgiveness = Forgiveness.polite;
     private Format format = Format.glulx;
     private String desc = "";
 }

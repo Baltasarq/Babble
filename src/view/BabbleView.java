@@ -188,6 +188,7 @@ public class BabbleView extends JFrame {
                 BabbleView.this.aboutBox.setVisible( false );
             }
         } );
+        btOk.setHorizontalAlignment( JButton.CENTER );
         lblWebPage.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 
         if ( this.getIconImage() != null ) {
@@ -214,6 +215,8 @@ public class BabbleView extends JFrame {
         infoPanel.add( lblAuthor );
         infoPanel.add( Box.createRigidArea( new Dimension( 0,5 ) ) );
         infoPanel.add( lblWebPage );
+        infoPanel.add( Box.createRigidArea( new Dimension( 0,10 ) ) );
+        infoPanel.add( btOk );
         infoPanel.add( Box.createRigidArea( new Dimension( 0,20 ) ) );
 
         aboutPanel.setLayout( new BorderLayout( 10, 10 ) );
@@ -222,12 +225,14 @@ public class BabbleView extends JFrame {
         aboutPanel.add( infoPanel, BorderLayout.CENTER  );
 
         this.aboutBox.setContentPane( aboutPanel );
+        this.aboutBox.pack();
+
         this.aboutBox.setTitle( this.opAbout.getText() );
         this.aboutBox.setModal( true );
         this.aboutBox.setResizable( false );
         this.aboutBox.setLocationRelativeTo( this );
-        this.aboutBox.pack();
     }
+
 
     private void buildMenu()
     {
@@ -393,30 +398,35 @@ public class BabbleView extends JFrame {
                 edTitleKeyReleased(evt);
             }
         });
+        this.edTitle.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edTitle.getPreferredSize().height ) );
         Box boxTitle = Box.createVerticalBox();
         boxTitle.add(Box.createVerticalGlue());
         boxTitle.add(this.edTitle);
         boxTitle.add(Box.createVerticalGlue());
 
         this.edSubtitle = new javax.swing.JTextField();
+        this.edSubtitle.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edSubtitle.getPreferredSize().height ) );
         Box boxSubtitle = Box.createVerticalBox();
         boxSubtitle.add(Box.createVerticalGlue());
         boxSubtitle.add(this.edSubtitle);
         boxSubtitle.add(Box.createVerticalGlue());
 
         this.edAuthor = new javax.swing.JTextField();
+        this.edAuthor.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edAuthor.getPreferredSize().height ) );
         Box boxAuthor = Box.createVerticalBox();
         boxAuthor.add(Box.createVerticalGlue());
         boxAuthor.add(this.edAuthor);
         boxAuthor.add(Box.createVerticalGlue());
 
         this.edEmail = new javax.swing.JTextField();
+        this.edEmail.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edEmail.getPreferredSize().height ) );
         Box boxEmail = Box.createVerticalBox();
         boxEmail.add(Box.createVerticalGlue());
         boxEmail.add(this.edEmail);
         boxEmail.add(Box.createVerticalGlue());
 
         this.edUrl = new javax.swing.JTextField();
+        this.edUrl.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edUrl.getPreferredSize().height ) );
         Box boxUrl = Box.createVerticalBox();
         boxUrl.add(Box.createVerticalGlue());
         boxUrl.add(this.edUrl);
@@ -602,10 +612,12 @@ public class BabbleView extends JFrame {
         this.lblIfId = new javax.swing.JLabel();
         this.lblIfId.setFont( new java.awt.Font( "Cordia New", 1, 18 ) );
         this.lblIfId.setHorizontalAlignment( JLabel.CENTER );
+        this.lblIfId.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.lblIfId.getPreferredSize().height ) );
 
         this.idPanel.setBorder( javax.swing.BorderFactory.createTitledBorder( "IfId" ) );
         this.idPanel.setLayout( new BorderLayout() );
         this.idPanel.add( this.lblIfId, BorderLayout.CENTER );
+        this.idPanel.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.idPanel.getPreferredSize().height ) );
     }
 
     private void buildIcon()
