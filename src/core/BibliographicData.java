@@ -45,7 +45,7 @@ public class BibliographicData {
     public static final String FmtDate = "yyyy/MM/dd";
     public static final String MsgPartMissing = " is missing.";
     public static final String MsgPartInvalidField = "Invalid field: ";
-    
+
     public static final String EtqXmlCr = "br";
     public static final String EtqStory = "story";
     public static final String EtqIFictionVersion = "version";
@@ -490,7 +490,7 @@ public class BibliographicData {
             int numLine = 0;
             for(String descLine: descLines) {
                 hd.characters( descLine.toCharArray(), 0, descLine.length() );
-                
+
                 if ( numLine < ( descLines.length -1 ) ) {
                     hd.startElement( "", "", "br", null );
                     hd.endElement( "", "", "br" );
@@ -621,7 +621,7 @@ public class BibliographicData {
 
                 if ( node != null ) {
                     StringBuilder strDesc = new StringBuilder();
-                    
+
                     // Retrieve the text desc with the <br>'s
                     for(int i = 0; i < node.getChildNodes().getLength(); ++i) {
                         Node n = node.getChildNodes().item( i );
@@ -632,7 +632,7 @@ public class BibliographicData {
                             strDesc.append( n.getTextContent()  );
                         }
                     }
-                    
+
                     toret.setDesc( strDesc.toString() );
                 }
 
