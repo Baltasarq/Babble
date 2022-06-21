@@ -14,6 +14,8 @@ public class Ppal {
         JFrame mainWindow = null;
 
         try {
+            System.setProperty( "swing.aatext", "true" );
+            System.setProperty( "awt.useSystemAAFontSettings", "on" );
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName()
             );
