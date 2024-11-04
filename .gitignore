@@ -5,6 +5,7 @@ build/
 # IDEA Config files
 .idea/misc.xml
 .idea/workspace.xml
+.idea/artifacts/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
