@@ -16,7 +16,7 @@
     <header>
       <div class="container">
         <h1>Babble</h1>
-        <h2>Genera información bibliográfica, siguiendo el tratado de Babel<br>Generates bibliographic information for interactive fiction, following the treaty of Babel.</h2>
+        <h2>Genera información bibliográfica para ficción interactiva (aventuras conversacionales, juegos de texto), siguiendo el tratado de Babel<br>Generates bibliographic information for interactive fiction, following the treaty of Babel.</h2>
 
         <section id="downloads">
           <a href="https://github.com/Baltasarq/Babble/zipball/master" class="btn">Download as .zip</a>
@@ -29,7 +29,118 @@
     <div class="container">
       <section id="main_content">
         <h3>Babble</h3>
-          <p><a href="http://www.caad.es/baltasarq/prys/babble/">Web for Babble</a>.</p>
+          <div style="text-align: justify;">En el momento de
+            escribir este documento, es necesario escribir a mano un archivo <span style="font-style: italic;">XML</span>
+            (con extensi&#243;n iFiction) que describa la informaci&#243;n
+            bibliogr&#225;fica de la aventura, buscar alguna forma de generar un <span
+              style="font-style: italic;">IfID</span> v&#225;lido (utilizando los <span
+              style="font-style: italic;">UUID</span> de base aleatoria), insertarlo en
+            el archivo, y finalmente, utilizar una herramienta como <a href="../bresc/bresc.html">bresc</a>
+            para empaquetarlo todo, aventura, informaci&#243;n bibliogr&#225;fica y
+            multimedia. <span style="font-style: italic;">Babble</span> tiene como
+            objetivo automatizar la creaci&#243;n del archivo junto con su <span style="font-style: italic;">IfID</span>,
+            de manera que se pueda, f&#225;cilmente y c&#243;modamente, crear o
+            modificar la informaci&#243;n bibliogr&#225;fica para empaquetarla
+            despu&#233;s. <span style="text-decoration: underline;">Esta herramienta no
+              realiza ninguna tarea de empaquetamiento</span>.<br>
+            <br>
+            <span style="font-style: italic;">At
+              the moment of writing this document, in order to write metadata for an
+              interactive fiction piece, it is needed to write a </span>XML<span style="font-style: italic;">
+              file by hand, describing the bibliographic information, look for some way
+              of generating a valid </span>IfID<span style="font-style: italic;">
+              (emplying an aleatory-based </span>UUID<span style="font-style: italic;">),
+              insert it inside the metadata file, and pack everything (text adventure,
+              metadata and multimedia) using a packager such as </span><a target="_blank"
+              href="../bresc/bresc.html">bresc</a><span style="font-style: italic;">.
+              Babble aims at automatize (ina a comfortable way) the process of
+              generating/modifying metadata and </span>IfID<span style="font-style: italic;">'s.
+              <span style="text-decoration: underline;">It does not do any packing task.</span></span>
+        </div>
+        <h3>Uso de Babble</h3>
+        <div style="text-align: justify;"><span style="font-style: italic;">Babble</span>
+          es una aplicaci&#243;n <a target="_blank" title="Java" href="http://www.java.com/"><span
+              style="font-style: italic;">Java</span></a>
+          de escritorio, que funciona de una manera intuitiva, empleando las
+          mismas convenciones que cualquier aplicaci&#243;n de este tipo.
+          B&#225;sicamente,
+          con <span style="font-style: italic;">Archivo &gt;&gt; Nuevo</span> se crea
+          una nueva informaci&#243;n bibliogr&#225;fica, apareciendo los campos para
+          poder rellenar todos los datos. Con <span style="font-style: italic;">Archivo
+            &gt;&gt; Guardar</span> o <span style="font-style: italic;">Archivo
+            &gt;&gt; Cerrar</span>
+          se guarda en un arhcivo con extensi&#243;n iFiction. Cada nuevo documento
+          conlleva un nuevo IfID &#250;nico, pero se puede generar uno nuevo
+          aleatoriamente con <span style="font-style: italic;">Editar &gt;&gt; Generar
+            IfID</span>.<br>
+          <br>
+          &#160;&#160;&#160; Babble<span style="font-style: italic;"> is a <a target="_blank"
+              title="Java" href="http://www.java.com/">Java</a>
+            desktop applicaiton, working intruitively, and employing the same
+            conventions in any other application of its type. You can translate the
+            application into english by choosing </span>Tools &gt;&gt; English<span style="font-style: italic;">.
+            Basically, with </span>File &gt;&gt; New<span style="font-style: italic;">,
+            you create a new metadata document, appearing all the entry boxes needed in
+            order to fill the required information. With </span>File &gt;&gt; Save<span
+            style="font-style: italic;"> or </span>File &gt;&gt; Close<span style="font-style: italic;">
+            the document is saved as a file with the iFiction extension. Each new
+            bibliographic metadata document will have its own, unique, IfID, but
+            you can generate another one with </span>Edit &gt;&gt; Generate IfID.
+          <div style="text-align: center;"><span style="font-style: italic;"><img style="width: 644px; height: 468px;"
+                alt="Babble" src="babble.png"></span><br>
+            <span style="font-style: italic;"></span></div>
+        </div>
+        <h3>Informaci&#243;n bibliogr&#225;fica tratada (<span style="font-style: italic;">metadata
+            managed</span>)</h3>
+        La informaci&#243;n m&#225;s importante de la tratada y modificada por Babble,
+        dentro de la especifiaci&#243;n del <a target="_blank" title="Treaty of Babel"
+          href="http://babel.ifarchive.org/">tratado de Babel</a>, es la siguiente:<br>
+        <span style="font-style: italic;">The main metadata managed by Babble, from all
+          the inside of the <a target="_blank" title="Treaty of Babel" href="http://babel.ifarchive.org/">treaty
+            of Babel,</a> is the following one:</span><br>
+        <table style="width: 75%; text-align: left; margin-left: auto; margin-right: auto;"
+          border="0" cellpadding="2" cellspacing="2">
+          <tr>
+              <th  style="text-align: center" valign="middle">Metadato</td>
+              <th  style="text-align: center" valign="middle">Informaci&#243;n</td>
+          </tr>
+          <tbody>
+            <tr>
+              <td align="center" valign="middle"><pre>Title</pre></td>
+              <td align="center" valign="middle">T&#237;tulo
+                de la obra.<br>
+                <span style="font-style: italic;">Title of the interactive fiction
+                  piece.</span></td>
+            </tr>
+            <tr>
+              <td align="center" valign="middle"><pre>Author</pre></td>
+              <td align="center" valign="middle">Autor de la obra<br>
+                <span style="font-style: italic;">Author of the </span><span style="font-style: italic;">
+                  interactive fiction piece.</span></td>
+            </tr>
+            <tr>
+              <td align="center" valign="middle"><pre>Subtitle</pre></td>
+              <td  align="center" valign="middle">Subt&#237;tulo de la obra.<br>
+                <span style="font-style: italic;">Subitle of the interactive fiction
+                  piece.</span></td>
+            </tr>
+            <tr>
+              <td align="center" valign="middle"><pre>Author's web</pre></td>
+              <td align="center" valign="middle">Web del autor.<br>
+                <span style="font-style: italic;">Web page of the author.</span></td>
+            </tr>
+            <tr>
+              <td align="center" valign="middle"><pre>e.Mail</pre></td>
+              <td align="center" valign="middle">Correo electr&#243;nico del autor.<br>
+                <span style="font-style: italic;">E.mail of the author.</span></td>
+            </tr>
+            <tr>
+              <td align="center" valign="middle"><pre>Description</pre></td>
+              <td align="center" valign="middle">Descripci&#243;n de la obra.<br>
+                Description of the interactive fiction piece.</td>
+            </tr>
+          </tbody>
+        </table>
         <h3>Links</h3>
         <ul>
           <li><a target="_blank" href="http://caad.es/">CAAD</a></li>
