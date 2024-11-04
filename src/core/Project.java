@@ -1,15 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+// Babble (c) 2014/24 Baltasar MIT License <baltasarq@gmail.com>
+
 
 package core;
+
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- *
+ * The project file, relating a file and its biblio data.
  * @author baltasarq
  */
 public class Project {
@@ -35,7 +34,7 @@ public class Project {
         }
 
         // Create bibliographic information
-        biblio = BibliographicData.loadFrom( ifFile );
+        this.biblio = BiblioGraphicDataXML.loadFrom( ifFile );
     }
 
     public void setIfFile(File ifFile) {
@@ -72,5 +71,5 @@ public class Project {
     }
 
     private File ifFile;
-    private BibliographicData biblio;
+    private final BibliographicData biblio;
 }

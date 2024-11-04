@@ -1,8 +1,11 @@
+// Babble (c) 2014/24 Baltasar MIT License <baltasarq@gmail.com>
+
+
 package view;
 
-import core.Util;
 
 import javax.swing.*;
+
 
 /**
  * Triggers the execution
@@ -19,7 +22,9 @@ public class Ppal {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName()
             );
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            System.err.println( "Error setting antialising" );
+        }
 
         // Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated( true );
@@ -37,8 +42,8 @@ public class Ppal {
                 msg = "unexpected app error";
             }
 
-            e.printStackTrace();
-            Util.msgError( mainWindow, msg );
+            System.err.println( msg );
+            SwingUtil.msgError( mainWindow, msg );
         }
     }
 }

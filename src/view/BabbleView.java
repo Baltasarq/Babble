@@ -1,15 +1,10 @@
-/*
- * BabbleView.java
- *
- * Created on 4 de junio de 2008, 11:44
- */
+// Babble (c) 2014/24 Baltasar MIT License <baltasarq@gmail.com>
+
 
 package view;
 
-import core.AppInfo;
-import core.BibliographicData;
-import core.Project;
-import core.Util;
+
+import core.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,21 +15,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.text.DateFormat;
+import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+
 
 /**
  * This Frame inputs data in order to create the iFiction file.
  * @author  baltasarq
  */
 public class BabbleView extends JFrame {
-    public static final String Title = "Babelifier";
-    public static final String CmdBabel = "babel";
-    public static final String CmdBabelOpts = "-blorbs";
     public static final String[] NoProject = {
         "No hay un proyecto abierto",
         "There is no open project"
@@ -46,7 +35,8 @@ public class BabbleView extends JFrame {
     };
 
     /** Creates new form BabbleView */
-    public BabbleView() {
+    public BabbleView()
+    {
         this.build();
         this.translateViewIntoSpanish();
         this.deactivate();
@@ -86,11 +76,11 @@ public class BabbleView extends JFrame {
         System.exit( 0 );
     }
 
-    public static void fillComboBox(JComboBox cmb, String values[], int selected) {
-        DefaultComboBoxModel items = new DefaultComboBoxModel();
-        
-        for(int i = 0; i < values.length; ++i) {
-            items.addElement( values[ i ] );
+    public static void fillComboBox(JComboBox<String> cmb, String[] values, int selected) {
+        DefaultComboBoxModel<String> items = new DefaultComboBoxModel<>();
+
+        for(String value: values) {
+            items.addElement( value );
         }
         
         cmb.setModel( items );
@@ -98,7 +88,7 @@ public class BabbleView extends JFrame {
     }
 
     private void setTitle() {
-        super.setTitle( AppInfo.name + " - []" );
+        super.setTitle( AppInfo.NAME + " - []" );
     }
 
     @Override
@@ -107,17 +97,13 @@ public class BabbleView extends JFrame {
             name = name.trim();
 
             if ( !name.isEmpty() ) {
-                super.setTitle( AppInfo.name + " - [ " + name + " ]" );
+                super.setTitle( AppInfo.NAME + " - [ " + name + " ]" );
             }
         }
     }
 
-    private String getReleaseValueAsString() {
-        return ( Integer.toString( this.getReleaseValue() ) ).trim();
-    }
-
-     private int getReleaseValue() {
-        return ( (Integer) edVersion.getValue() ).intValue();
+    private int getReleaseValue() {
+        return (Integer) edVersion.getValue();
     }
 
     private void chk() {
@@ -134,60 +120,21 @@ public class BabbleView extends JFrame {
         }        
     }
 
-    private BibliographicData syncBibliogaphicData(Project prj) throws Exception {
-        BibliographicData toret = prj.getBiblio();
-
-        // Basic attributes
-        toret.setAuthor( edAuthor.getText() );
-        toret.setSubtitle( edSubtitle.getText() );
-        toret.setDesc( edDesc.getText() );
-        toret.setEMail( edEmail.getText() );
-        toret.setForgiveness(
-                BibliographicData.Forgiveness.values()[edForgiveness.getSelectedIndex()]
-        );
-        toret.setFormat(
-                BibliographicData.Format.values()[ edFormat.getSelectedIndex() ]
-        );
-        toret.setGenre(
-                BibliographicData.Genre.values()[ edGenre.getSelectedIndex() ]
-        );
-        toret.setLanguage(
-                Util.Language.values()[ edLanguage.getSelectedIndex() ]
-        );
-        toret.setRelease( getReleaseValue() );
-        toret.setTitle( edTitle.getText() );
-        
-        // URL
-        if ( !edUrl.getText().trim().isEmpty() ) {
-            toret.setUrl( new URL( edUrl.getText() ) );
-        }
-        
-        // Date
-        DateFormat formatter = new SimpleDateFormat( BibliographicData.FmtDate );
-        Date date = formatter.parse( edDate.getText() );
-        Calendar cal = Calendar.getInstance();
-        cal.setTime( date );
-        toret.setDate( cal );
-        
-        return toret;
-    }
-
     private void buildAboutBox()
     {
-        JLabel lblAuthor = new JLabel( AppInfo.author );
-        final JLabel lblWebPage = new JLabel( AppInfo.web );
-        JLabel lblAppName = new JLabel( AppInfo.name + " " + AppInfo.version );
+        JLabel lblAuthor = new JLabel( AppInfo.AUTHOR);
+        final JLabel lblWebPage = new JLabel( AppInfo.WEB);
+        JLabel lblAppName = new JLabel( AppInfo.NAME + " " + AppInfo.VERSION);
         JButton btOk = new JButton( "Ok" );
         JLabel lblIcon = new JLabel( "" );
         JPanel aboutPanel = new JPanel();
         JPanel infoPanel = new JPanel();
 
+        this.aboutBox = new javax.swing.JDialog();
+
         btOk.setMnemonic( 'o' );
-        btOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BabbleView.this.aboutBox.setVisible(false);
-            }
-        });
+        btOk.addActionListener( (_) -> this.aboutBox.setVisible( false ) );
+
         btOk.setHorizontalAlignment( JButton.CENTER );
         lblWebPage.setCursor( new Cursor( Cursor.HAND_CURSOR ) );
 
@@ -198,15 +145,10 @@ public class BabbleView extends JFrame {
             lblIcon.setText( "" );
         }
 
-        lblAuthor.setFont( new java.awt.Font( "Tahoma", 2, 12 ) );
-        lblWebPage.setFont(new java.awt.Font("Times New Roman", 0, 18));
-        lblWebPage.setForeground(new java.awt.Color(51, 0, 255));
+        lblWebPage.setForeground( new java.awt.Color(51, 0, 255) );
         lblWebPage.addMouseListener( new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) { openURI( lblWebPage.getText() ); }
         } );
-        lblAppName.setFont( new java.awt.Font( "Tahoma", 1, 18 ) );
-
-        this.aboutBox = new javax.swing.JDialog();
 
         infoPanel.setLayout( new BoxLayout( infoPanel, BoxLayout.PAGE_AXIS ) );
         infoPanel.add( Box.createRigidArea( new Dimension( 0,20 ) ) );
@@ -255,62 +197,38 @@ public class BabbleView extends JFrame {
 
         this.mFile.setText( "File" );
 
-        this.opNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        this.opNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         this.opNew.setMnemonic('n');
         this.opNew.setText("New");
-        this.opNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opNewActionPerformed(evt);
-            }
-        });
+        this.opNew.addActionListener( (_) -> this.opNew() );
         this.mFile.add( this.opNew );
 
-        this.opOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        this.opOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         this.opOpen.setMnemonic('o');
         this.opOpen.setText("Open");
-        this.opOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opOpenActionPerformed(evt);
-            }
-        });
+        this.opOpen.addActionListener( (_) -> this.opOpen() );
         this.mFile.add( this.opOpen );
 
-        opSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        opSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         opSave.setMnemonic('s');
         opSave.setText("Save");
-        opSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opSaveActionPerformed(evt);
-            }
-        });
+        opSave.addActionListener( (_) -> this.opSave() );
         this.mFile.add( this.opSave );
 
         this.opSaveAs.setMnemonic('a');
         this.opSaveAs.setText("Save as...");
-        this.opSaveAs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opSaveAsActionPerformed(evt);
-            }
-        });
+        this.opSaveAs.addActionListener( (_) -> this.opSaveAs() );
         this.mFile.add( this.opSaveAs );
 
         this.opClose.setMnemonic('c');
         this.opClose.setText("Close");
-        this.opClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opCloseActionPerformed(evt);
-            }
-        });
+        this.opClose.addActionListener( (_) -> this.opClose() );
         this.mFile.add( this.opClose );
 
-        this.opQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        this.opQuit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         this.opQuit.setMnemonic('q');
         this.opQuit.setText("Quit");
-        this.opQuit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                quit();
-            }
-        });
+        this.opQuit.addActionListener( (_) -> this.quit() );
         this.mFile.add( this.opQuit );
 
         this.mMainMenu.add( this.mFile );
@@ -319,20 +237,12 @@ public class BabbleView extends JFrame {
 
         this.opGenerate.setMnemonic('g');
         this.opGenerate.setText("Generate new IfID");
-        this.opGenerate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opGenerateActionPerformed(evt);
-            }
-        });
+        this.opGenerate.addActionListener( (_) -> this.opGenerate() );
         this.mEdit.add( this.opGenerate );
 
         this.opCopyIfId.setMnemonic('c');
         this.opCopyIfId.setText("Copy IfID to Clipboard");
-        this.opCopyIfId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opCopyIfIdActionPerformed(evt);
-            }
-        });
+        this.opCopyIfId.addActionListener( (_) -> this.opCopyIfId() );
         this.mEdit.add( this.opCopyIfId );
 
         this.mMainMenu.add( this.mEdit );
@@ -342,20 +252,12 @@ public class BabbleView extends JFrame {
         this.opLanguageES.setMnemonic('e');
         this.opLanguageES.setSelected(true);
         this.opLanguageES.setText("Español");
-        this.opLanguageES.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opLanguageESActionPerformed(evt);
-            }
-        });
+        this.opLanguageES.addActionListener( (_) -> this.opLanguageES() );
         this.mTools.add( this.opLanguageES );
 
         this.opLanguageEN.setMnemonic('n');
         this.opLanguageEN.setText("English");
-        this.opLanguageEN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opLanguageENActionPerformed(evt);
-            }
-        });
+        this.opLanguageEN.addActionListener( (_) -> this.opLanguageEN() );
         this.mTools.add( this.opLanguageEN );
 
         this.mMainMenu.add( this.mTools );
@@ -364,11 +266,7 @@ public class BabbleView extends JFrame {
 
         this.opAbout.setMnemonic('a');
         this.opAbout.setText("About...");
-        this.opAbout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                opAboutActionPerformed(evt);
-            }
-        });
+        this.opAbout.addActionListener( (_) -> this.opAbout() );
         this.mHelp.add( this.opAbout );
 
         this.mMainMenu.add( this.mHelp );
@@ -389,13 +287,11 @@ public class BabbleView extends JFrame {
         this.lblIfAuthor = new javax.swing.JLabel();
         this.lblEmail = new javax.swing.JLabel( "E.mail" );
         this.lblURL = new javax.swing.JLabel();
-        this.lblTitle.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-        this.lblIfAuthor.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
 
         this.edTitle = new javax.swing.JTextField();
-        this.edTitle.addKeyListener(new java.awt.event.KeyAdapter() {
+        this.edTitle.addKeyListener( new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                edTitleKeyReleased(evt);
+                BabbleView.this.edTitleKeyReleased();
             }
         });
         this.edTitle.setMaximumSize(new Dimension(Integer.MAX_VALUE, this.edTitle.getPreferredSize().height));
@@ -489,13 +385,6 @@ public class BabbleView extends JFrame {
         this.lblForgiveness = new javax.swing.JLabel();
         this.lblFormat = new javax.swing.JLabel();
 
-        this.lblRelease.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-        this.lblDate.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-        this.lblGenre.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-        this.lblLanguage.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-        this.lblForgiveness.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-        this.lblFormat.setFont( new java.awt.Font( "DejaVu Sans", 1, 12 ) );
-
         this.edVersion = new javax.swing.JSpinner();
         this.edVersion.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edVersion.getPreferredSize().height ) );
         Box boxVersion = Box.createVerticalBox();
@@ -511,14 +400,14 @@ public class BabbleView extends JFrame {
         boxDate.add( this.edDate );
         boxDate.add( Box.createVerticalGlue() );
 
-        this.edGenre = new javax.swing.JComboBox();
+        this.edGenre = new javax.swing.JComboBox<String>();
         this.edGenre.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edGenre.getPreferredSize().height ) );
         Box boxGenre = Box.createVerticalBox();
         boxGenre.add( Box.createVerticalGlue() );
         boxGenre.add( this.edGenre );
         boxGenre.add( Box.createVerticalGlue() );
 
-        this.edLanguage = new javax.swing.JComboBox();
+        this.edLanguage = new javax.swing.JComboBox<String>();
         this.edLanguage.setMaximumSize( this.edLanguage.getPreferredSize() );
         this.edLanguage.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edLanguage.getPreferredSize().height ) );
         Box boxLanguage = Box.createVerticalBox();
@@ -526,7 +415,7 @@ public class BabbleView extends JFrame {
         boxLanguage.add( this.edLanguage );
         boxLanguage.add( Box.createVerticalGlue() );
 
-        this.edForgiveness = new javax.swing.JComboBox();
+        this.edForgiveness = new javax.swing.JComboBox<String>();
         this.edForgiveness.setMaximumSize( this.edForgiveness.getPreferredSize() );
         this.edForgiveness.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edForgiveness.getPreferredSize().height ) );
         Box boxForgiveness = Box.createVerticalBox();
@@ -534,7 +423,7 @@ public class BabbleView extends JFrame {
         boxForgiveness.add( this.edForgiveness );
         boxForgiveness.add( Box.createVerticalGlue() );
 
-        this.edFormat = new javax.swing.JComboBox();
+        this.edFormat = new javax.swing.JComboBox<String>();
         this.edFormat.setMaximumSize( this.edFormat.getPreferredSize() );
         this.edFormat.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.edFormat.getPreferredSize().height ) );
         Box boxFormat = Box.createVerticalBox();
@@ -610,7 +499,7 @@ public class BabbleView extends JFrame {
     {
         this.idPanel = new javax.swing.JPanel();
         this.lblIfId = new javax.swing.JLabel();
-        this.lblIfId.setFont( new java.awt.Font( "Cordia New", 1, 18 ) );
+        this.lblIfId.setFont( new Font( "Arial", Font.BOLD, 24 ) );
         this.lblIfId.setHorizontalAlignment( JLabel.CENTER );
         this.lblIfId.setMaximumSize( new Dimension( Integer.MAX_VALUE, this.lblIfId.getPreferredSize().height ) );
 
@@ -637,7 +526,6 @@ public class BabbleView extends JFrame {
         {
            System.err.println( "While loading icon..." );
            System.err.println( exc.getLocalizedMessage() );
-           exc.printStackTrace();
         }
 
         return;
@@ -658,14 +546,14 @@ public class BabbleView extends JFrame {
         this.buildDescPanel();
         this.buildIdPanel();
 
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.add( this.infoPanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(this.formatInfoPanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(this.descPanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(this.idPanel);
+        panel.setLayout( new BoxLayout(panel, BoxLayout.PAGE_AXIS ) );
+        panel.add( this.infoPanel );
+        panel.add( Box.createRigidArea( new Dimension( 0, 5 ) ) );
+        panel.add( this.formatInfoPanel );
+        panel.add( Box.createRigidArea( new Dimension( 0, 5 ) ) );
+        panel.add( this.descPanel );
+        panel.add( Box.createRigidArea( new Dimension( 0, 5 ) ) );
+        panel.add( this.idPanel );
 
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         this.setMinimumSize( new Dimension( 620, 460 ) );
@@ -674,147 +562,162 @@ public class BabbleView extends JFrame {
         this.pack();
     }
 
-private void opOpenActionPerformed(java.awt.event.ActionEvent evt) {
-    this.opCloseActionPerformed( evt );
+    private void opOpen()
+    {
+        this.opClose();
 
-    File ifFile = Util.openFileDlg( this, Project.IFictionExt, Project.IFictionExtExpl );
-    
-    try {
-        if ( ifFile != null ) {
-            this.activate();
-            prj = new Project( ifFile );
+        File ifFile = SwingUtil.openFileDlg( this, Project.IFictionExt, Project.IFictionExtExpl );
 
-            fillFieldsWith( prj.getBiblio() );
-        }
-    } catch (Exception ex) {
-        Util.msgError( this, ex.getMessage() );
-        prj = null;
-        this.deactivate();
-    }
-}
-
-private void opGenerateActionPerformed(java.awt.event.ActionEvent evt) {
-    if ( prj != null ) {
-        prj.getBiblio().setNewIfID();
-        lblIfId.setText(prj.getBiblio().getIfID());
-    }
-    else Util.msgError( this, this.getNoProjectMsg() );
-}
-
-private void opAboutActionPerformed(java.awt.event.ActionEvent evt)
-{
-    this.aboutBox.setVisible( true );
-}
-
-private void openURI(String uri) {
-    try {
-        Desktop.getDesktop().browse( new URI( uri ) );
-    } catch(Exception e) {
-        Util.msgError( this, "Open: " + uri );
-    }
-}
-
-private void opLanguageESActionPerformed(java.awt.event.ActionEvent evt) {
-    this.setLanguage( Util.Language.ES );
-    opLanguageES.setSelected( true );
-    opLanguageEN.setSelected( false );
-    this.translateViewIntoSpanish();
-}
-
-private void opLanguageENActionPerformed(java.awt.event.ActionEvent evt) {
-    this.setLanguage( Util.Language.EN );
-    opLanguageES.setSelected( false );
-    opLanguageEN.setSelected( true );
-    this.translateViewIntoEnglish();
-}
-
-private void opNewActionPerformed(java.awt.event.ActionEvent evt) {
-    this.opCloseActionPerformed( evt );
-    
-    activate();
-    prj = new Project( BibliographicData.DefaultTitle );
-    this.fillFieldsWith( prj.getBiblio() );
-    this.setTitle( BibliographicData.DefaultTitle );
-}
-
-private void opSaveActionPerformed(java.awt.event.ActionEvent evt) {
-    File ifFile = null;
-
-    if ( prj == null ) {
-        Util.msgError( this, this.getNoProjectMsg() );
-        return;
-    }
-
-    try {
-        chk();
-        this.syncUIToProject();
-
-        if ( prj.getIfFile() == null ) {
-            // Put the filename synced with the title of the project
-            prj.syncFileName();
-            Util.setLastFile( prj.getIfFile() );
-
-            // Trigger the save dialog
-            ifFile = Util.saveFileDlg( this, Project.IFictionExt, Project.IFictionExtExpl );
-
+        try {
             if ( ifFile != null ) {
-                if ( ifFile.exists() ) {
-                    if ( !Util.askIf( this, this.getAreYouSureMsg() + ifFile.getAbsolutePath() ) )
-                    {
-                        return;
-                    }
-                }
+                this.activate();
+                prj = new Project( ifFile );
 
-                prj.setIfFile( ifFile );
-                Util.setLastFile( ifFile );
+                fillFieldsWith( prj.getBiblio() );
             }
-            else return;
+        } catch (Exception ex) {
+            SwingUtil.msgError( this, ex.getMessage() );
+            prj = null;
+            this.deactivate();
+        }
+    }
+
+    private void opGenerate()
+    {
+        if ( prj != null ) {
+            prj.getBiblio().setNewIfID();
+            lblIfId.setText(prj.getBiblio().getIfID());
+        }
+        else SwingUtil.msgError( this, this.getNoProjectMsg() );
+    }
+
+    private void opAbout()
+    {
+        this.aboutBox.setVisible( true );
+    }
+
+    private void openURI(String uri)
+    {
+        try {
+            Desktop.getDesktop().browse( new URI( uri ) );
+        } catch(Exception e) {
+            SwingUtil.msgError( this, "Open: " + uri );
+        }
+    }
+
+    private void opLanguageES()
+    {
+        this.setLanguage( I18n.Language.ES );
+        opLanguageES.setSelected( true );
+        opLanguageEN.setSelected( false );
+        this.translateViewIntoSpanish();
+    }
+
+    private void opLanguageEN()
+    {
+        this.setLanguage( I18n.Language.EN );
+        opLanguageES.setSelected( false );
+        opLanguageEN.setSelected( true );
+        this.translateViewIntoEnglish();
+    }
+
+    private void opNew()
+    {
+        this.opClose();
+
+        this.activate();
+        this.prj = new Project( BibliographicData.DefaultTitle );
+        this.fillFieldsWith( prj.getBiblio() );
+        this.setTitle( BibliographicData.DefaultTitle );
+    }
+
+    private void opSave()
+    {
+        File ifFile = null;
+
+        if ( prj == null ) {
+            SwingUtil.msgError( this, this.getNoProjectMsg() );
+            return;
         }
 
         try {
-            prj.getBiblio().saveTo( prj.getIfFile() );
-        } catch (IOException ex) {
-            Util.msgError( this, ex.getMessage() );
+            chk();
+            this.syncUIToProject();
+
+            if ( prj.getIfFile() == null ) {
+                // Put the filename synced with the title of the project
+                prj.syncFileName();
+                SwingUtil.setLastFile( prj.getIfFile() );
+
+                // Trigger the save dialog
+                ifFile = SwingUtil.saveFileDlg( this, Project.IFictionExt, Project.IFictionExtExpl );
+
+                if ( ifFile != null ) {
+                    if ( ifFile.exists() ) {
+                        if ( !SwingUtil.askIf( this, this.getAreYouSureMsg() + ifFile.getAbsolutePath() ) )
+                        {
+                            return;
+                        }
+                    }
+
+                    prj.setIfFile( ifFile );
+                    SwingUtil.setLastFile( ifFile );
+                }
+                else {
+                    return;
+                }
+            }
+
+            try {
+                new BiblioGraphicDataXML( prj.getBiblio() ).saveTo( prj.getIfFile() );
+            } catch (IOException ex) {
+                SwingUtil.msgError( this, ex.getMessage() );
+            }
+        } catch(Exception e) {
+            SwingUtil.msgError( this, e.getMessage() );
         }
-    } catch(Exception e) {
-        Util.msgError( this, e.getMessage() );
     }
-}
 
-private void opCloseActionPerformed(java.awt.event.ActionEvent evt) {
-    if ( prj != null ) {
-        if ( !Util.askIf( this, this.getAreYouSureMsg() + " (" + prj.getName() + ")" ) )
-        {
-            return;
+    private void opClose()
+    {
+        if ( prj != null ) {
+            if ( !SwingUtil.askIf( this, this.getAreYouSureMsg() + " (" + prj.getName() + ")" ) )
+            {
+                return;
+            }
+
+            this.opSave();
         }
-        
-        this.opSaveActionPerformed( evt );
+
+        prj = null;
+        this.deactivate();
     }
 
-    prj = null;
-    this.deactivate();
-}
+    private void edTitleKeyReleased()
+    {
+        if ( prj != null ) {
+            String newTitle = edTitle.getText().trim();
 
-private void edTitleKeyReleased(java.awt.event.KeyEvent evt) {
-    if ( prj != null ) {
-        String newTitle = edTitle.getText().trim();
-
-        if ( !newTitle.isEmpty() ) {
-            prj.getBiblio().setTitle( newTitle );
-            this.setTitle( newTitle );
+            if ( !newTitle.isEmpty() ) {
+                prj.getBiblio().setTitle( newTitle );
+                this.setTitle( newTitle );
+            }
         }
     }
-}
 
-private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
-    if ( prj != null ) {
-        Util.setLastFile( prj.getIfFile() );
-        prj.setIfFile( null );
-        opSaveActionPerformed( evt );
-    } else Util.msgError( this, this.getNoProjectMsg() );
-}
+    private void opSaveAs()
+    {
+        if ( prj != null ) {
+            SwingUtil.setLastFile( prj.getIfFile() );
+            prj.setIfFile( null );
+            this.opSave();
+        } else {
+            SwingUtil.msgError( this, this.getNoProjectMsg() );
+        }
+    }
 
-    private void opCopyIfIdActionPerformed(java.awt.event.ActionEvent evt) {
+    private void opCopyIfId()
+    {
         StringSelection ss = new StringSelection( this.lblIfId.getText() );
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents( ss, null );
     }
@@ -830,15 +733,15 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
         this.edTitle.setText( babelData.getTitle() );
         this.edSubtitle.setText( babelData.getSubtitle() );
         this.edDesc.setText( babelData.getDesc() );
-        this.edVersion.setValue(new Integer(babelData.getRelease()));
-        this.edDate.setText( babelData.getDateAsString() );
+        this.edVersion.setValue( babelData.getRelease() );
+        this.edDate.setText( babelData.getDate().toString() );
         this.edUrl.setText( babelData.getUrl().toString() );
         this.edEmail.setText( babelData.getEMail() );
         this.edLanguage.setSelectedIndex( babelData.getLanguage().ordinal() );
         this.edGenre.setSelectedIndex( babelData.getGenre().ordinal() );
         this.edFormat.setSelectedIndex( babelData.getFormat().ordinal() );
         this.edForgiveness.setSelectedIndex(babelData.getForgiveness().ordinal());
-        this.lblIfId.setText(babelData.getIfID());
+        this.lblIfId.setText( babelData.getIfID() );
 
         // Polish
         this.setTitle( babelData.getTitle() );
@@ -851,16 +754,13 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
     private void fillFieldsWithDefaultValues()
     {
         // Fill fields
-        DateFormat dateFormat = new SimpleDateFormat( BibliographicData.FmtDate );
-        Date date = new Date();
-        
         lblIfId.setText("");
         edTitle.setText( "" );
         edSubtitle.setText( "" );
         edAuthor.setText( "" );
-        edDate.setText( dateFormat.format(date) );
+        edDate.setText( new ISODate().toString() );
         edEmail.setText( "" );
-        edVersion.setValue(new Integer(1));
+        edVersion.setValue( 1 );
         edDesc.setText( "" );
         edUrl.setText( "" );
         
@@ -871,7 +771,7 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
      * Returns the language used in the view
      * @return the language
      */
-    public Util.Language getLanguage()
+    public I18n.Language getLanguage()
     {
         return language;
     }
@@ -880,7 +780,7 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
      * Sets the language to use in the view
      * @param language the language to set
      */
-    public void setLanguage(Util.Language language)
+    public void setLanguage(I18n.Language language)
     {
         this.language = language;
     }
@@ -890,17 +790,18 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
      */
     private void fillCombos()
     {
-        fillComboBox( edGenre, BibliographicData.getGenresNames( getLanguage() ), 0 );
-        fillComboBox( edLanguage, Util.getStrLanguages( getLanguage() ), 0 );
-        fillComboBox(edForgiveness, BibliographicData.getForgivenessNames( getLanguage() ), 0 );
-        fillComboBox( edFormat, BibliographicData.getFormatNames( getLanguage() ), 0 );
+        fillComboBox( this.edGenre, BibliographicData.getGenresNames( getLanguage() ), 0 );
+        fillComboBox( this.edLanguage, I18n.getStrLanguages( getLanguage() ), 0 );
+        fillComboBox( this.edForgiveness, BibliographicData.getForgivenessNames( getLanguage() ), 0 );
+        fillComboBox( this.edFormat, BibliographicData.getFormatNames( getLanguage() ), 0 );
     }
 
     /**
      * Translates the view into english on-the-fly
      */
-    private void translateViewIntoEnglish() {
-        // Main menu
+    private void translateViewIntoEnglish()
+    {
+       // Main menu
        mFile.setText( "File" );
        mFile.setMnemonic( 'f' );
        opOpen.setText( "Open" );
@@ -1012,7 +913,7 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
     void syncUIToProject() throws MalformedURLException, ParseException
     {
         if ( prj == null ) {
-            Util.msgError( this, this.getNoProjectMsg() );
+            SwingUtil.msgError( this, this.getNoProjectMsg() );
             return;
         }
 
@@ -1035,20 +936,20 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
                 BibliographicData.Genre.values()[ edGenre.getSelectedIndex() ]
         );
         toret.setLanguage(
-                Util.Language.values()[ edLanguage.getSelectedIndex() ]
+                I18n.Language.values()[ edLanguage.getSelectedIndex() ]
         );
 
         // URL
         if ( !edUrl.getText().trim().isEmpty() ) {
-            toret.setUrl( new URL( edUrl.getText() ) );
+            try {
+                toret.setUrl( new URI( edUrl.getText() ).toURL() );
+            } catch (URISyntaxException e) {
+                System.err.println( e.getMessage() );
+            }
         }
 
         // Date
-        DateFormat formatter = new SimpleDateFormat( BibliographicData.FmtDate );
-        Date date = formatter.parse( edDate.getText() );
-        Calendar cal = Calendar.getInstance();
-        cal.setTime( date );
-        toret.setDate( cal );
+        toret.setDate( ISODate.fromString( edDate.getText() ) );
     }
 
     public String getNoProjectMsg()
@@ -1056,9 +957,10 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
         return BabbleView.getNoProjectMsg( this.getLanguage() );
     }
 
-    public static String getNoProjectMsg(Util.Language lang) {
+    public static String getNoProjectMsg(I18n.Language lang)
+    {
         int op = 0;
-        if ( lang == Util.Language.EN ) {
+        if ( lang == I18n.Language.EN ) {
             op = 1;
         }
 
@@ -1070,9 +972,10 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
         return BabbleView.getAreYouSureMsg( this.getLanguage() );
     }
 
-    public static String getAreYouSureMsg(Util.Language lang) {
+    public static String getAreYouSureMsg(I18n.Language lang)
+    {
         int op = 0;
-        if ( lang == Util.Language.EN ) {
+        if ( lang == I18n.Language.EN ) {
             op = 1;
         }
 
@@ -1080,7 +983,7 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
     private Project prj = null;
-    private Util.Language language = Util.Language.ES;
+    private I18n.Language language = I18n.Language.ES;
 
     private javax.swing.JDialog aboutBox;
     private javax.swing.JPanel formatInfoPanel;
@@ -1091,10 +994,10 @@ private void opSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JTextField edDate;
     private javax.swing.JTextArea edDesc;
     private javax.swing.JTextField edEmail;
-    private javax.swing.JComboBox edForgiveness;
-    private javax.swing.JComboBox edFormat;
-    private javax.swing.JComboBox edGenre;
-    private javax.swing.JComboBox edLanguage;
+    private javax.swing.JComboBox<String> edForgiveness;
+    private javax.swing.JComboBox<String> edFormat;
+    private javax.swing.JComboBox<String> edGenre;
+    private javax.swing.JComboBox<String> edLanguage;
     private javax.swing.JSpinner edVersion;
     private javax.swing.JTextField edSubtitle;
     private javax.swing.JTextField edTitle;
